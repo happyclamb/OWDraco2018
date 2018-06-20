@@ -28,11 +28,12 @@ class DracoLightPatterner {
 
 		unsigned long choosePattern(int currPattern);
 		unsigned long pattern_general_colors();
-		unsigned long pattern_solid_fade();
+		unsigned long pattern_solid_fade(bool useOffset);
+		unsigned long pattern_rainbow(byte minWheel, byte maxWheel, bool wrap);
 		unsigned long pattern_circus();
 
 		void colorWheelSnippetFade(TLC_CHANNEL_TYPE colorArray[], int arraySize, int patternSpeed,
-				int brightnessSpeed, byte wheelBegin, byte wheelEnd, bool wrap=false);
+				int brightnessSpeed, byte wheelBegin, byte wheelEnd, bool spreadPattern=true, bool wrap=false);
 };
 
 #endif // __DRACOLIGHTPATTERNER_H__

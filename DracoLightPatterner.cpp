@@ -35,7 +35,7 @@ void DracoLightPatterner::drawPattern() {
 
 	if(nextPatternSwitch <= millis()) {
 		currPattern++;
-		if(currPattern >= 5)
+		if(currPattern >= 8)
 			currPattern = 0;
 
 		nextPatternSwitch = millis() + choosePattern(currPattern);
@@ -46,21 +46,32 @@ void DracoLightPatterner::drawPattern() {
 
 unsigned long DracoLightPatterner::choosePattern(int currPattern)
 {
-	unsigned long nextLength = 0;
-
-	if(currPattern == 0)
-		nextLength = pattern_general_colors();
-	else if(currPattern == 1)
-		nextLength = pattern_solid_fade();
-	else if(currPattern == 2)
-		nextLength = pattern_general_colors();
-	else if(currPattern == 3)
-		nextLength = pattern_solid_fade();
-	else if(currPattern == 4)
-		nextLength = pattern_circus();
-
-	return nextLength;
+	switch (currPattern) {
+		case 0:   return pattern_general_colors();	// 5 min
+		case 1:   return pattern_rainbow(60, 100, false);  // 1 min
+		case 2:   return pattern_solid_fade(false);	// 3 min
+		case 3:   return pattern_rainbow(0, 255, true); // 1 min
+		case 4:   return pattern_general_colors(); // 5 min
+		case 5:   return pattern_rainbow(60, 100, false);  // 1 min
+		case 6:   return pattern_solid_fade(true);	// 3 min
+		case 7:   return pattern_circus(); // 15 sec
+	}
 }
+
+unsigned long DracoLightPatterner::pattern_rainbow(byte minWheel, byte maxWheel, bool wrap) {
+	static int currSpeed = 1;
+	static unsigned long nextSwitch = 0;
+
+	if(nextSwitch <= millis()) {
+		currSpeed = random(5,15);
+		nextSwitch = millis() + 1000*10;
+	}
+
+	colorWheelSnippetFade(singleMan->lightMan()->channelArray, 19, 5, 5*currSpeed, minWheel, maxWheel, true, wrap);
+
+	return 60000; // 60 sec
+}
+
 
 unsigned long DracoLightPatterner::pattern_general_colors() {
 
@@ -71,18 +82,22 @@ unsigned long DracoLightPatterner::pattern_general_colors() {
 		currSpeed = random(8,15);
 		nextSpeedSwitch = millis() + 1000*15;
 	}
+	/*
+	                      8, 9, 10, 11, 12, 13, 14
+	36*(currSpeed-8) ==>  0,36, 72,108,144,180,216
+	36*(currSpeed-7) ==> 36,72,108,144,180,216,252
+	*/
+	colorWheelSnippetFade(hubs_array,        4,  4*currSpeed, 5,   36*(currSpeed-8), 36*(currSpeed-7), false);
+	colorWheelSnippetFade(tail_array,        1,  6*currSpeed, 0,    0, 255, true, true);
+	colorWheelSnippetFade(head_array,        1,  6*currSpeed, 0,    0, 255, true, true);
+	colorWheelSnippetFade(tube_tail_array,   4,  3*currSpeed, 13, 50, 110);
+	colorWheelSnippetFade(tube_middle_array, 4,  4*currSpeed, 11, 50, 110);
+	colorWheelSnippetFade(tube_head_array,   5,  5*currSpeed,  9, 50, 110);
 
-	colorWheelSnippetFade(hubs_array,        4,  4*currSpeed, 5,   60, 100);
-	colorWheelSnippetFade(tail_array,        1,  6*currSpeed, 0,    0, 255, true);
-	colorWheelSnippetFade(head_array,        1,  6*currSpeed, 0,    0, 255, true);
-	colorWheelSnippetFade(tube_tail_array,   4,  2*currSpeed, 10, 125, 235);
-	colorWheelSnippetFade(tube_middle_array, 5, 10*currSpeed, 20,   0,  40);
-	colorWheelSnippetFade(tube_head_array,   5, 10*currSpeed, 20,   0,  40);
-
-	return 600000; // 10 min
+	return 300000; // 5 min
 }
 
-unsigned long DracoLightPatterner::pattern_solid_fade() {
+unsigned long DracoLightPatterner::pattern_solid_fade(bool useOffset) {
 	static unsigned long nextSwitch = 0;
 	static byte currWheelChoice = 1;
 	static int currSpeed = 1;
@@ -94,14 +109,18 @@ unsigned long DracoLightPatterner::pattern_solid_fade() {
 		nextSwitch = millis() + 1000*10;
 	}
 
-	colorWheelSnippetFade(hubs_array,        4,   1, 2*currSpeed,  currWheelChoice, currWheelChoice);
+	byte offsetWheelChoice = currWheelChoice;
+	if(useOffset)
+		offsetWheelChoice = currWheelChoice > 127 ? currWheelChoice - 128 : currWheelChoice + 128;
+
+	colorWheelSnippetFade(hubs_array,        4,   1, 2*currSpeed,  offsetWheelChoice, offsetWheelChoice);
 	colorWheelSnippetFade(tail_array,        1,   1, 2*currSpeed,  currWheelChoice, currWheelChoice);
 	colorWheelSnippetFade(head_array,        1,   1, 2*currSpeed,  currWheelChoice, currWheelChoice);
 	colorWheelSnippetFade(tube_tail_array,   4,   1, 2*currSpeed,  currWheelChoice, currWheelChoice);
-	colorWheelSnippetFade(tube_middle_array, 5,   1, 2*currSpeed,  currWheelChoice, currWheelChoice);
+	colorWheelSnippetFade(tube_middle_array, 4,   1, 2*currSpeed,  currWheelChoice, currWheelChoice);
 	colorWheelSnippetFade(tube_head_array,   5,   1, 2*currSpeed,  currWheelChoice, currWheelChoice);
 
-	return 240000; // 4 min
+	return 180000; // 3 min
 }
 
 unsigned long DracoLightPatterner::pattern_circus() {
@@ -126,17 +145,18 @@ unsigned long DracoLightPatterner::pattern_circus() {
 		brightness = (cosBright + 1.0)*1300.0; // never turn it all the way off
 	}
 
-	for(int i=0; i<25; i++) {
+	for(int i=0; i<19; i++) {
 		singleMan->lightMan()->setColorToChannelFromWheelPosition(singleMan->lightMan()->channelArray[i], random(255), brightness);
 	}
 	delay(30);
 
-	return 120000; // 2 min
+	return 15000; // 15 sec
 }
 
 void DracoLightPatterner::colorWheelSnippetFade(TLC_CHANNEL_TYPE colorArray[], int arraySize,
 		int patternSpeed, int brightnessSpeed,
-		byte wheelBegin, byte wheelEnd, bool wrap /*false*/) {
+		byte wheelBegin, byte wheelEnd,
+		bool spreadPattern /*true*/, bool wrap /*false*/) {
 
 	unsigned long currTime = millis();
 
@@ -172,7 +192,7 @@ void DracoLightPatterner::colorWheelSnippetFade(TLC_CHANNEL_TYPE colorArray[], i
 
 		byte wheelStepPosition = 0;
 		if(stepRange > 0) {
-			int offset = totalSteps / arraySize;
+			int offset = spreadPattern ? (totalSteps / arraySize) : 0;
 			int currIndex = patternIndex + offset*i;
 			if(currIndex > totalSteps)
 				currIndex -= totalSteps;
