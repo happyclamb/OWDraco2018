@@ -36,7 +36,6 @@ class LightManager {
 
 		DebugLightPatterner* debugPatterner = NULL;
 		DracoLightPatterner* dracoPatterner = NULL;
-
 };
 
 #endif // __LIGHTMANAGER_H__

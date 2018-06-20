@@ -18,11 +18,11 @@ class DracoLightPatterner {
 		SingletonManager* singleMan = NULL;
 
 		// Need to hold channel assignments for
-		//	 hubs(4); tail(1); tube_tail (4); tube_middle(5); tube_head(5);  head(1);
+		//	 hubs(4); tail(1); tube_tail (4); tube_middle(4); tube_head(5);  head(1);
 		TLC_CHANNEL_TYPE hubs_array[4];
 		TLC_CHANNEL_TYPE tail_array[1];
 		TLC_CHANNEL_TYPE tube_tail_array[4];
-		TLC_CHANNEL_TYPE tube_middle_array[5];
+		TLC_CHANNEL_TYPE tube_middle_array[4];
 		TLC_CHANNEL_TYPE tube_head_array[5];
 		TLC_CHANNEL_TYPE head_array[1];
 

@@ -18,11 +18,12 @@ void DebugLightPatterner::drawPattern() {
 	}
 
 	static int currPattern = 0;
-	int newPattern =  map(singleMan->inputMan()->getRightDial(), 0, 1023, 0, 3);
+	int newPattern =  map(singleMan->inputMan()->getRightDial(), 0, 1023, 0, 4);
 	if(newPattern != currPattern) {
 		currPattern = newPattern;
 		info_println(newPattern);
 	}
+
 	switch(currPattern)
 	{
 		case 0:
@@ -37,8 +38,16 @@ void DebugLightPatterner::drawPattern() {
 		case 3:
 			testPatternFullCount(blinkSpeed);
 			break;
+		case 4:
+			testPatternAllWhite();
+			break;
 		}
+}
 
+void DebugLightPatterner::testPatternAllWhite() {
+	for(int i=0; i<singleMan->lightMan()->getTotalChannels(); i++) {
+		singleMan->lightMan()->setColorToChannel(singleMan->lightMan()->channelArray[i], 255, 255, 255);
+	}
 }
 
 void DebugLightPatterner::testPatternRGBAll(long blinkSpeed) {

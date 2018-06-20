@@ -21,6 +21,7 @@ class DebugLightPatterner {
 		void testPatternStationCount(long blinkSpeed);
 		void testPatternStationChannelCount(long blinkSpeed);
 		void testPatternFullCount(long blinkSpeed);
+		void testPatternAllWhite();
 };
 
 #endif // __DEBUGLIGHTPATTERNER_H__

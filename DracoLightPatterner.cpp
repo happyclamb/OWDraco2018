@@ -8,29 +8,25 @@
 DracoLightPatterner::DracoLightPatterner(SingletonManager* _singleMan):
 	singleMan(_singleMan) {
 
-	hubs_array[0]         = singleMan->lightMan()->channelArray[0];
-	hubs_array[1]         = singleMan->lightMan()->channelArray[1];
-	hubs_array[2]         = singleMan->lightMan()->channelArray[2];
-	hubs_array[3]         = singleMan->lightMan()->channelArray[3];
-	tail_array[0]         = singleMan->lightMan()->channelArray[4];
-
-	head_array[0]         = singleMan->lightMan()->channelArray[5];
-	tube_tail_array[0]    = singleMan->lightMan()->channelArray[6];
-	tube_tail_array[1]    = singleMan->lightMan()->channelArray[7];
-	tube_tail_array[2]    = singleMan->lightMan()->channelArray[8];
-	tube_tail_array[3]    = singleMan->lightMan()->channelArray[9];
-
-	tube_middle_array[0]  = singleMan->lightMan()->channelArray[10];
-	tube_middle_array[1]  = singleMan->lightMan()->channelArray[11];
-	tube_middle_array[2]  = singleMan->lightMan()->channelArray[12];
-	tube_middle_array[3]  = singleMan->lightMan()->channelArray[13];
-	tube_middle_array[4]  = singleMan->lightMan()->channelArray[14];
-
-	tube_head_array[0]    = singleMan->lightMan()->channelArray[15];
-	tube_head_array[1]    = singleMan->lightMan()->channelArray[16];
-	tube_head_array[2]    = singleMan->lightMan()->channelArray[17];
-	tube_head_array[3]    = singleMan->lightMan()->channelArray[18];
-	tube_head_array[4]    = singleMan->lightMan()->channelArray[19];
+	head_array[0]         = singleMan->lightMan()->channelArray[0];
+	hubs_array[0]         = singleMan->lightMan()->channelArray[1];
+	tube_head_array[0]    = singleMan->lightMan()->channelArray[2];
+	tube_head_array[1]    = singleMan->lightMan()->channelArray[3];
+	tube_head_array[2]    = singleMan->lightMan()->channelArray[4];
+	tube_head_array[3]    = singleMan->lightMan()->channelArray[5];
+	tube_head_array[4]    = singleMan->lightMan()->channelArray[6];
+	hubs_array[1]         = singleMan->lightMan()->channelArray[7];
+	tube_middle_array[0]  = singleMan->lightMan()->channelArray[8];
+	tube_middle_array[1]  = singleMan->lightMan()->channelArray[9];
+	tube_middle_array[2]  = singleMan->lightMan()->channelArray[10];
+	tube_middle_array[3]  = singleMan->lightMan()->channelArray[11];
+	hubs_array[2]         = singleMan->lightMan()->channelArray[12];
+	tube_tail_array[0]    = singleMan->lightMan()->channelArray[13];
+	tube_tail_array[1]    = singleMan->lightMan()->channelArray[14];
+	tube_tail_array[2]    = singleMan->lightMan()->channelArray[15];
+	tube_tail_array[3]    = singleMan->lightMan()->channelArray[16];
+	hubs_array[3]         = singleMan->lightMan()->channelArray[17];
+	tail_array[0]         = singleMan->lightMan()->channelArray[18];
 }
 
 void DracoLightPatterner::drawPattern() {
